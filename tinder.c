@@ -4,6 +4,14 @@
 
 #define CLEAR_SCREEN_REGEX "\e[1;1H\e[2J"
 
+#ifdef _WIN32
+#include <windows.h>
+#define SLEEP(ms) Sleep(ms)
+#elif defined(__linux__) || defined(__APPLE__)
+#include <unistd.h>
+#define SLEEP(ms) usleep((ms) * 1000)
+#endif
+
 void printLogo()
 {
     const char *LOGO = "    ___________   ______  __________     \n"

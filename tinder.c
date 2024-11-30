@@ -150,6 +150,7 @@ int main()
     resetCriteria(player);
     askUser(player);
     generateMenu(player);
+    free(player);
     return 0;
 }
 
@@ -960,6 +961,7 @@ void getCandidates(User *p, User *new[40])
     {
         new[i] = NULL;
     }
+    free(userPreferenceUser);
 }
 
 void showCandidates(User *p)

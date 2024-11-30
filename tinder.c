@@ -1004,17 +1004,23 @@ void generateMenu(User *p)
         switch (menu)
         {
         case 1:
+            SLEEP(250);
             showProfile(p);
             break;
         case 2:
+            SLEEP(250);
             editUserCriteria(p);
             break;
         case 3:
+            SLEEP(250);
             showCandidates(p);
             break;
         case 4:
+            puts("Thanks for using our app!");
+            SLEEP(250);
             break;
         default:
+            SLEEP(250);
             break;
         }
     } while (menu != 4);

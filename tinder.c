@@ -434,6 +434,9 @@ void addLoveLanguagePreferences(User *p)
             addMore = 1;
         }
     } while (addMore == 1);
+    printf("\n\n");
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 void personalityValidation(User *p, enum PersonalityType temp)
@@ -524,6 +527,9 @@ void addPersonalityPreferences(User *p)
             addMore = 1;
         }
     } while (addMore == 1);
+    printf("\n\n");
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 void hobbyValidation(User *p, enum Hobby temp)
@@ -624,6 +630,9 @@ void addHobbyPreferences(User *p)
             addMore = 1;
         }
     } while (addMore == 1);
+    printf("\n\n");
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 void lifeStyleValidation(User *p, enum Lifestyle temp)
@@ -714,6 +723,9 @@ void addLifeStylePreferences(User *p)
             addMore = 1;
         }
     } while (addMore == 1);
+    printf("\n\n");
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 void relationshipGoalValidation(User *p, enum RelationShipGoal temp)
@@ -804,6 +816,9 @@ void addRelationshipGoalPreferences(User *p)
             addMore = 1;
         }
     } while (addMore == 1);
+    printf("\n\n");
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 void addAgeRange(User *p)
@@ -828,6 +843,9 @@ void addAgeRange(User *p)
             break;
         }
     } while (validated == 0);
+    printf("\n\n");
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 // First phase component end
@@ -901,9 +919,112 @@ void showProfile(User *p)
     printf("Tekan tombol apa saja untuk melanjutkan\n");
     getchar();
 }
+void resetPreferences(User *p, char choice)
+{
+    switch (tolower(choice))
+    {
+    case 'l':
+        for (int i = 0; i < 5; i++)
+        {
+            p->kriteria.tipeLoveLanguage[i] = -1;
+        }
+        break;
+    case 'p':
+        for (int i = 0; i < 3; i++)
+        {
+            p->kriteria.tipePersonality[i] = -1;
+        }
+        break;
+    case 'h':
+        for (int i = 0; i < 5; i++)
+        {
+            p->kriteria.tipeHobby[i] = -1;
+        }
+        break;
+    case 'r':
+        for (int i = 0; i < 3; i++)
+        {
+            p->kriteria.tipeRelationShipGoal[i] = -1;
+        }
+        break;
+    case 's':
+        for (int i = 0; i < 5; i++)
+        {
+            p->kriteria.tipeLifestyle[i] = -1;
+        }
+        break;
+    default:
+        break;
+    }
+}
 
 void editUserCriteria(User *p)
 {
+    int menu = 0;
+    do
+    {
+        clear_screen();
+        printLogo();
+        printf("Edit User Criteria and Information\n");
+        printf("1. Reset Love Language Preferences\n");
+        printf("2. Reset Personality Preferences\n");
+        printf("3. Reset Hobby Preferences\n");
+        printf("4. Reset Relationship Goal Preferences\n");
+        printf("5. Reset Lifestyle Preferences\n");
+        printf("6. Reset Age Range Preferences\n");
+        printf("7. Reset All Preferences\n");
+        printf("8. Back\n");
+        printf("Your choice : ");
+        scanf("%d", &menu);
+        getchar();
+        switch (menu)
+        {
+        case 1:
+            resetPreferences(p, 'l');
+            addLoveLanguagePreferences(p);
+            break;
+        case 2:
+            resetPreferences(p, 'p');
+            addPersonalityPreferences(p);
+            break;
+        case 3:
+            resetPreferences(p, 'h');
+            addHobbyPreferences(p);
+            break;
+        case 4:
+            resetPreferences(p, 'r');
+            addRelationshipGoalPreferences(p);
+            break;
+        case 5:
+            resetPreferences(p, 's');
+            addLifeStylePreferences(p);
+            break;
+        case 6:
+            addAgeRange(p);
+            break;
+        case 7:
+        // Reset all the criteria from user
+            resetPreferences(p, 'l');
+            resetPreferences(p, 'p');
+            resetPreferences(p, 'h');
+            resetPreferences(p, 'r');
+            resetPreferences(p, 's');
+        // Then add all the preferences by the user input
+            addLoveLanguagePreferences(p);
+            addAgeRange(p);
+            addPersonalityPreferences(p);
+            addLifeStylePreferences(p);
+            addHobbyPreferences(p);
+            addRelationshipGoalPreferences(p);
+            clear_screen();
+            addAgeRange(p);
+            break;
+        case 8:
+            break;
+        default:
+            break;
+        }
+    } while (menu != 8);
 }
 
 void getCandidates(User *p, User *new[40])

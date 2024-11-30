@@ -3,6 +3,7 @@
 #include <ctype.h>
 
 #define CLEAR_SCREEN_REGEX "\e[1;1H\e[2J"
+#define INVALID_PREFERENCES -1
 
 #ifdef _WIN32
 #include <windows.h>
@@ -22,6 +23,11 @@ void printLogo()
 
     printf("%s\n", LOGO);
     puts("Cinder, a Tinder-like dating app\n");
+}
+
+void getbuffer(){
+    char c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
 }
 
 void clearScreen()
@@ -95,36 +101,36 @@ typedef struct
 int candidateIndex = 0;
 
 User otherUsers[40] = {
-    {"Alex", pria, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, -1, -1}, {Ambivert, Extroverted, -1}, {Technology, Gaming, Sport, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 22},
-    {"Jordan", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, -1, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Technology, Outdoor, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 25},
-    {"Taylor", pria, {{18, 24}, {PhysicalTouch, ReceivingGIft, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Gaming, Sport, Outdoor, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 23},
-    {"Morgan", wanita, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, ReceivingGIft, -1}, {Ambivert, Extroverted, -1}, {CreativeArt, Sport, Outdoor, -1, -1}, {Casual, LongTerm, -1}, {MorningPerson, Flexible, -1}}, 24},
-    {"Jamie", pria, {{22, 32}, {QualityTime, PhysicalTouch, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Technology, Gaming, Sport, Outdoor, -1}, {Undecided, Casual, -1}, {NightOwl, Flexible, -1}}, 28},
-    {"Sam", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, PhysicalTouch, -1, -1}, {Ambivert, Introverted, -1}, {Gaming, CreativeArt, Sport, -1, -1}, {LongTerm, Undecided, -1}, {MorningPerson, NightOwl, -1}}, 27},
-    {"Chris", pria, {{25, 35}, {ActOfService, ReceivingGIft, -1, -1, -1}, {Introverted, Ambivert, -1}, {Technology, Gaming, Sport, -1, -1}, {Casual, LongTerm, -1}, {Flexible, NightOwl, -1}}, 30},
-    {"Casey", wanita, {{18, 24}, {QualityTime, PhysicalTouch, -1, -1, -1}, {Ambivert, Extroverted, -1}, {Sport, Outdoor, Technology, -1, -1}, {Casual, LongTerm, -1}, {Flexible, NightOwl, -1}}, 22},
-    {"Skyler", pria, {{18, 26}, {WordOfAffirmation, ActOfService, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Gaming, Technology, Sport, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 24},
-    {"Drew", wanita, {{22, 30}, {QualityTime, ReceivingGIft, PhysicalTouch, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Outdoor, Gaming, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 26},
-    {"Riley", pria, {{20, 28}, {ActOfService, PhysicalTouch, -1, -1, -1}, {Ambivert, Extroverted, -1}, {Sport, Outdoor, Technology, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 23},
-    {"Quinn", wanita, {{18, 24}, {QualityTime, WordOfAffirmation, -1, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Technology, Outdoor, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 21},
-    {"Harper", pria, {{22, 32}, {ReceivingGIft, PhysicalTouch, -1, -1, -1}, {Ambivert, Extroverted, -1}, {Gaming, Sport, Outdoor, -1, -1}, {Undecided, Casual, -1}, {NightOwl, Flexible, -1}}, 29},
-    {"Jamie", wanita, {{20, 28}, {QualityTime, PhysicalTouch, ActOfService, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Technology, Outdoor, -1, -1}, {LongTerm, Undecided, -1}, {MorningPerson, Flexible, -1}}, 24},
-    {"Cameron", pria, {{18, 24}, {QualityTime, ReceivingGIft, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Sport, Gaming, Technology, -1, -1}, {Casual, LongTerm, -1}, {NightOwl, Flexible, -1}}, 20},
-    {"Reese", wanita, {{22, 32}, {ActOfService, PhysicalTouch, -1, -1, -1}, {Introverted, Ambivert, -1}, {Gaming, CreativeArt, Outdoor, -1, -1}, {Casual, LongTerm, -1}, {MorningPerson, Flexible, -1}}, 28},
-    {"Toby", pria, {{18, 26}, {WordOfAffirmation, PhysicalTouch, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Technology, Gaming, Sport, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 24},
-    {"Sydney", wanita, {{22, 30}, {QualityTime, ReceivingGIft, -1, -1, -1}, {Ambivert, Introverted, -1}, {CreativeArt, Sport, Outdoor, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 27},
-    {"Blake", pria, {{20, 30}, {ActOfService, ReceivingGIft, -1, -1, -1}, {Introverted, Ambivert, -1}, {Gaming, Technology, Sport, -1, -1}, {Casual, LongTerm, -1}, {Flexible, NightOwl, -1}}, 29},
-    {"Avery", wanita, {{22, 28}, {QualityTime, PhysicalTouch, ActOfService, -1, -1}, {Extroverted, Ambivert, -1}, {CreativeArt, Sport, Outdoor, -1, -1}, {Casual, LongTerm, -1}, {MorningPerson, Flexible, -1}}, 26},
-    {"Peyton", pria, {{18, 24}, {ReceivingGIft, PhysicalTouch, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Gaming, Sport, Technology, -1, -1}, {Casual, LongTerm, -1}, {NightOwl, Flexible, -1}}, 23},
-    {"Robin", wanita, {{22, 32}, {QualityTime, WordOfAffirmation, ActOfService, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Outdoor, Gaming, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 27},
-    {"Devon", pria, {{18, 24}, {QualityTime, PhysicalTouch, -1, -1, -1}, {Ambivert, Extroverted, -1}, {Technology, Gaming, Sport, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 24},
-    {"Dylan", wanita, {{22, 30}, {WordOfAffirmation, ReceivingGIft, -1, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Sport, Gaming, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 25},
-    {"Kai", pria, {{18, 26}, {ActOfService, PhysicalTouch, -1, -1, -1}, {Extroverted, Ambivert, -1}, {Gaming, Technology, Outdoor, -1, -1}, {Casual, LongTerm, -1}, {NightOwl, Flexible, -1}}, 21},
-    {"Toni", wanita, {{20, 28}, {QualityTime, PhysicalTouch, -1, -1, -1}, {Ambivert, Introverted, -1}, {CreativeArt, Outdoor, Sport, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 24},
-    {"Kendall", pria, {{22, 30}, {QualityTime, WordOfAffirmation, -1, -1, -1}, {Ambivert, Extroverted, -1}, {Technology, Gaming, Sport, -1, -1}, {Casual, LongTerm, -1}, {NightOwl, Flexible, -1}}, 26},
-    {"Jules", wanita, {{18, 24}, {PhysicalTouch, ReceivingGIft, -1, -1, -1}, {Ambivert, Introverted, -1}, {CreativeArt, Technology, Gaming, -1, -1}, {Casual, LongTerm, -1}, {MorningPerson, Flexible, -1}}, 22},
-    {"Rowan", pria, {{22, 30}, {WordOfAffirmation, QualityTime, ActOfService, -1, -1}, {Extroverted, Ambivert, -1}, {Gaming, Technology, Outdoor, -1, -1}, {Casual, Undecided, -1}, {NightOwl, Flexible, -1}}, 29},
-    {"Taylor", wanita, {{20, 28}, {QualityTime, ReceivingGIft, PhysicalTouch, -1, -1}, {Introverted, Ambivert, -1}, {CreativeArt, Outdoor, Sport, -1, -1}, {LongTerm, Casual, -1}, {MorningPerson, Flexible, -1}}, 27},
+    {"Alex", pria, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 22},
+    {"Jordan", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25},
+    {"Taylor", pria, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23},
+    {"Morgan", wanita, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, ReceivingGIft, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24},
+    {"Jamie", pria, {{22, 32}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, Outdoor, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 28},
+    {"Sam", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {Gaming, CreativeArt, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, NightOwl, INVALID_PREFERENCES}}, 27},
+    {"Chris", pria, {{25, 35}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 30},
+    {"Casey", wanita, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 22},
+    {"Skyler", pria, {{18, 26}, {WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24},
+    {"Drew", wanita, {{22, 30}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26},
+    {"Riley", pria, {{20, 28}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23},
+    {"Quinn", wanita, {{18, 24}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 21},
+    {"Harper", pria, {{22, 32}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29},
+    {"Jamie", wanita, {{20, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24},
+    {"Cameron", pria, {{18, 24}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Sport, Gaming, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 20},
+    {"Reese", wanita, {{22, 32}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, CreativeArt, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 28},
+    {"Toby", pria, {{18, 26}, {WordOfAffirmation, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24},
+    {"Sydney", wanita, {{22, 30}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27},
+    {"Blake", pria, {{20, 30}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 29},
+    {"Avery", wanita, {{22, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26},
+    {"Peyton", pria, {{18, 24}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23},
+    {"Robin", wanita, {{22, 32}, {QualityTime, WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27},
+    {"Devon", pria, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24},
+    {"Dylan", wanita, {{22, 30}, {WordOfAffirmation, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25},
+    {"Kai", pria, {{18, 26}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 21},
+    {"Toni", wanita, {{20, 28}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24},
+    {"Kendall", pria, {{22, 30}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 26},
+    {"Jules", wanita, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Technology, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 22},
+    {"Rowan", pria, {{22, 30}, {WordOfAffirmation, QualityTime, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29},
+    {"Taylor", wanita, {{20, 28}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27},
 };
 
 // Function Prototype
@@ -139,7 +145,20 @@ void resetCriteria(User *p);
 void inputName(User *p);
 void inputAge(User *p);
 void inputGender(User *p);
+void loveLanguageValidation(User *p, enum LoveLanguage temp);
+void addLoveLanguagePreferences(User *p);
+void personalityValidation(User *p, enum PersonalityType temp);
+void addPersonalityPreferences(User *p);
+void hobbyValidation(User *p, enum Hobby temp);
+void addHobbyPreferences(User *p);
+void relationshipGoalValidation(User *p, enum RelationShipGoal temp);
+void addRelationshipGoalPreferences(User *p);
+void lifeStyleValidation(User *p, enum Lifestyle temp);
+void addLifeStylePreferences(User *p);
+void addAgeRange(User *p);
 void askUser(User *p);
+void showProfile(User *p);
+void resetPreferences(User *p, char choice);
 void editUserCriteria(User *p);
 void showCandidates(User *p);
 void generateMenu(User *p);
@@ -150,6 +169,7 @@ int main()
     resetCriteria(player);
     askUser(player);
     generateMenu(player);
+    free(player);
     return 0;
 }
 
@@ -368,20 +388,21 @@ void addLoveLanguagePreferences(User *p)
     do
     {
         addMore = 0;
-        clear_screen();
-        printLogo();
+
         int validated = 0;
-        printf("Your Chosen Love Languages: ");
-        for (int i = 0; i < 5; i++)
-        {
-            if (p->kriteria.tipeLoveLanguage[i] != -1)
-            {
-                printf("%s, ", getLoveLanguageString(p->kriteria.tipeLoveLanguage[i]));
-            }
-        }
-        printf("\n\n\n");
         do
         {
+            clear_screen();
+            printLogo();
+            printf("Your Chosen Love Languages: ");
+            for (int i = 0; i < 5; i++)
+            {
+                if (p->kriteria.tipeLoveLanguage[i] != -1)
+                {
+                    printf("%s, ", getLoveLanguageString(p->kriteria.tipeLoveLanguage[i]));
+                }
+            }
+            printf("\n\n\n");
             if (validated == 0)
             {
                 printf("Please input the right choice that is given by the question\n\n");
@@ -395,7 +416,7 @@ void addLoveLanguagePreferences(User *p)
             printf("5. Receiving Gift\n");
             printf("Masukkan preferensi untuk Love Language-mu: \n");
             scanf("%d", &temp);
-            getchar();
+            getbuffer();
 
             switch (temp)
             {
@@ -424,7 +445,7 @@ void addLoveLanguagePreferences(User *p)
                 break;
             default:
                 validated = 0;
-                break;
+                continue;
             }
         } while (validated == 0);
 
@@ -433,6 +454,7 @@ void addLoveLanguagePreferences(User *p)
         {
             addMore = 1;
         }
+        getchar();
     } while (addMore == 1);
     printf("\n\n");
     printf("Tekan tombol apa saja untuk melanjutkan\n");
@@ -473,20 +495,20 @@ void addPersonalityPreferences(User *p)
     do
     {
         addMore = 0;
-        clear_screen();
-        printLogo();
         int validated = 0;
-        printf("Your Chosen Personality Types: ");
-        for (int i = 0; i < 3; i++)
-        {
-            if (p->kriteria.tipePersonality[i] != -1)
-            {
-                printf("%s, ", getPersonalityTypeString(p->kriteria.tipePersonality[i]));
-            }
-        }
-        printf("\n\n\n");
         do
         {
+            clear_screen();
+            printLogo();
+            printf("Your Chosen Personality Types: ");
+            for (int i = 0; i < 3; i++)
+            {
+                if (p->kriteria.tipePersonality[i] != -1)
+                {
+                    printf("%s, ", getPersonalityTypeString(p->kriteria.tipePersonality[i]));
+                }
+            }
+            printf("\n\n\n");
             if (validated == 0)
             {
                 printf("Please input the right choice that is given by the question\n\n");
@@ -498,7 +520,7 @@ void addPersonalityPreferences(User *p)
             printf("3. Ambivert\n");
             printf("Masukkan preferensi untuk Personality-mu: \n");
             scanf("%d", &temp);
-            getchar();
+            getbuffer();
 
             switch (temp)
             {
@@ -517,7 +539,7 @@ void addPersonalityPreferences(User *p)
                 break;
             default:
                 validated = 0;
-                break;
+                continue;
             }
         } while (validated == 0);
 
@@ -526,6 +548,7 @@ void addPersonalityPreferences(User *p)
         {
             addMore = 1;
         }
+        getchar();
     } while (addMore == 1);
     printf("\n\n");
     printf("Tekan tombol apa saja untuk melanjutkan\n");
@@ -566,20 +589,20 @@ void addHobbyPreferences(User *p)
     do
     {
         addMore = 0;
-        clear_screen();
-        printLogo();
         int validated = 0;
-        printf("Your Chosen Hobbies: ");
-        for (int i = 0; i < 5; i++)
-        {
-            if (p->kriteria.tipeHobby[i] != -1)
-            {
-                printf("%s, ", getHobbyString(p->kriteria.tipeHobby[i]));
-            }
-        }
-        printf("\n\n\n");
         do
         {
+            clear_screen();
+            printLogo();
+            printf("Your Chosen Hobbies: ");
+            for (int i = 0; i < 5; i++)
+            {
+                if (p->kriteria.tipeHobby[i] != -1)
+                {
+                    printf("%s, ", getHobbyString(p->kriteria.tipeHobby[i]));
+                }
+            }
+            printf("\n\n\n");
             if (validated == 0)
             {
                 printf("Please input the right choice that is given by the question\n\n");
@@ -593,7 +616,7 @@ void addHobbyPreferences(User *p)
             printf("5. Outdoor\n");
             printf("Masukkan preferensi untuk Hobby-mu: \n");
             scanf("%d", &temp);
-            getchar();
+            getbuffer();
 
             switch (temp)
             {
@@ -620,7 +643,7 @@ void addHobbyPreferences(User *p)
                 break;
             default:
                 validated = 0;
-                break;
+                continue;
             }
         } while (validated == 0);
 
@@ -629,6 +652,7 @@ void addHobbyPreferences(User *p)
         {
             addMore = 1;
         }
+        getchar();
     } while (addMore == 1);
     printf("\n\n");
     printf("Tekan tombol apa saja untuk melanjutkan\n");
@@ -669,20 +693,20 @@ void addLifeStylePreferences(User *p)
     do
     {
         addMore = 0;
-        clear_screen();
-        printLogo();
         int validated = 0;
-        printf("Your Chosen Lifestyle: ");
-        for (int i = 0; i < 5; i++)
-        {
-            if (p->kriteria.tipeLifestyle[i] != -1)
-            {
-                printf("%s, ", getLifestyleString(p->kriteria.tipeLifestyle[i]));
-            }
-        }
-        printf("\n\n\n");
         do
         {
+            clear_screen();
+            printLogo();
+            printf("Your Chosen Lifestyle: ");
+            for (int i = 0; i < 5; i++)
+            {
+                if (p->kriteria.tipeLifestyle[i] != -1)
+                {
+                    printf("%s, ", getLifestyleString(p->kriteria.tipeLifestyle[i]));
+                }
+            }
+            printf("\n\n\n");
             if (validated == 0)
             {
                 printf("Please input the right choice that is given by the question\n\n");
@@ -694,7 +718,7 @@ void addLifeStylePreferences(User *p)
             printf("3. Flexible\n");
             printf("Masukkan preferensi untuk Lifestyle-mu: \n");
             scanf("%d", &temp);
-            getchar();
+            getbuffer();
 
             switch (temp)
             {
@@ -713,7 +737,7 @@ void addLifeStylePreferences(User *p)
                 break;
             default:
                 validated = 0;
-                break;
+                continue;
             }
         } while (validated == 0);
 
@@ -722,6 +746,7 @@ void addLifeStylePreferences(User *p)
         {
             addMore = 1;
         }
+        getchar();
     } while (addMore == 1);
     printf("\n\n");
     printf("Tekan tombol apa saja untuk melanjutkan\n");
@@ -762,20 +787,20 @@ void addRelationshipGoalPreferences(User *p)
     do
     {
         addMore = 0;
-        clear_screen();
-        printLogo();
         int validated = 0;
-        printf("Your Chosen Relationship Goal: ");
-        for (int i = 0; i < 5; i++)
-        {
-            if (p->kriteria.tipeRelationShipGoal[i] != -1)
-            {
-                printf("%s, ", getRelationShipGoalString(p->kriteria.tipeRelationShipGoal[i]));
-            }
-        }
-        printf("\n\n\n");
         do
         {
+            clear_screen();
+            printLogo();
+            printf("Your Chosen Relationship Goal: ");
+            for (int i = 0; i < 5; i++)
+            {
+                if (p->kriteria.tipeRelationShipGoal[i] != -1)
+                {
+                    printf("%s, ", getRelationShipGoalString(p->kriteria.tipeRelationShipGoal[i]));
+                }
+            }
+            printf("\n\n\n");
             if (validated == 0)
             {
                 printf("Please input the right choice that is given by the question\n\n");
@@ -787,7 +812,7 @@ void addRelationshipGoalPreferences(User *p)
             printf("3. Undecided\n");
             printf("Masukkan preferensi untuk Relationship Goal-mu: \n");
             scanf("%d", &temp);
-            getchar();
+            getbuffer();
 
             switch (temp)
             {
@@ -806,7 +831,7 @@ void addRelationshipGoalPreferences(User *p)
                 break;
             default:
                 validated = 0;
-                break;
+                continue;
             }
         } while (validated == 0);
 
@@ -815,6 +840,7 @@ void addRelationshipGoalPreferences(User *p)
         {
             addMore = 1;
         }
+        getchar();
     } while (addMore == 1);
     printf("\n\n");
     printf("Tekan tombol apa saja untuk melanjutkan\n");
@@ -829,8 +855,9 @@ void addAgeRange(User *p)
         clear_screen();
         printLogo();
         int input[2];
-        printf("Masukkan range umur untuk pasangan ideal anda: ");
+        printf("Masukkan range umur untuk pasangan ideal anda (contoh: 20 30): ");
         scanf("%d %d", &input[0], &input[1]);
+        getbuffer();
         if (input[1] < input[0])
         {
             printf("Umur kedua tidak boleh lebih kecil dari umur pertama\n");
@@ -1003,13 +1030,13 @@ void editUserCriteria(User *p)
             addAgeRange(p);
             break;
         case 7:
-        // Reset all the criteria from user
+            // Reset all the criteria from user
             resetPreferences(p, 'l');
             resetPreferences(p, 'p');
             resetPreferences(p, 'h');
             resetPreferences(p, 'r');
             resetPreferences(p, 's');
-        // Then add all the preferences by the user input
+            // Then add all the preferences by the use  r input
             addLoveLanguagePreferences(p);
             addAgeRange(p);
             addPersonalityPreferences(p);
@@ -1029,7 +1056,6 @@ void editUserCriteria(User *p)
 
 void getCandidates(User *p, User *new[40])
 {
-    User *userPreferenceUser = (User *)malloc(sizeof(User) * 40);
     int count = 0;
     for (int i = 0; i < 40; i++)
     {

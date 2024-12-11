@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 #define CLEAR_SCREEN_REGEX "\e[1;1H\e[2J"
 #define INVALID_PREFERENCES -1
+#define USERDATA "userdata.dat"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -92,10 +94,12 @@ typedef struct
 
 typedef struct
 {
+    char username[100];
+    char password[100];
     char nama[100];
     enum JenisKelamin jenis_kelamin;
     Criteria kriteria;
-    int umur;
+    int umur;   
 } User;
 
 int candidateIndex = 0;
@@ -162,12 +166,28 @@ void resetPreferences(User *p, char choice);
 void editUserCriteria(User *p);
 void showCandidates(User *p);
 void generateMenu(User *p);
-
+void loginPage();
+void registerUser(User *user, FILE *fp);
+void loginUser(User *user, FILE *fp);
+void showUser(FILE *fp);
 int main()
 {
+    // Check for user data file
+    FILE *userDataFile = fopen(USERDATA, "ab+");
+    if (userDataFile == NULL)
+    {
+        FILE *tempFile = fopen(USERDATA, "wb");
+        if (tempFile != NULL)
+        {
+            fclose(tempFile);
+        }
+        userDataFile = fopen(USERDATA, "ab+");
+    }
+
     User *player = (User *)malloc(sizeof(User));
+
     resetCriteria(player);
-    askUser(player);
+    loginPage(player, userDataFile);
     generateMenu(player);
     free(player);
     return 0;
@@ -1172,3 +1192,94 @@ void generateMenu(User *p)
         }
     } while (menu != 4);
 }
+
+void loginPage(User *user, FILE *fp)
+{
+    int choice;
+    puts("1. Login");
+    puts("2. Register");
+    puts("3. showUser");
+    
+    printf("Your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice)
+    {
+        case 1:
+            loginUser(user, fp);
+            break;
+        case 2:
+            registerUser(user, fp);
+            break;
+        case 3:
+            showUser(fp);
+            getchar();
+            getchar();
+            break;
+        default:
+            puts("Masukin yang bener ya dek");
+    }
+}
+
+void loginUser(User *user, FILE *fp)
+{
+    char tempUserName[100], tempPassword[100];
+    printf("Enter your username: ");
+    scanf("%s", tempUserName);
+
+    printf("Enter your password: ");
+    scanf("%s", tempPassword);
+    
+}
+
+void registerUser(User *user, FILE *fp)
+{
+    char tempUserName[100], tempPassword[100];
+    do
+    {
+        printf("Enter your username: ");
+        scanf("%s", tempUserName);
+
+        printf("Enter your password: ");
+        scanf("%s", tempPassword);
+        
+        int passLen = strlen(tempPassword);
+        
+        if (passLen < 8)
+            puts("Try again");
+        else
+            break;
+
+    } while (1);
+    
+    strcpy(user->username, tempUserName);
+    strcpy(user->password, tempPassword);
+
+    askUser(user);
+
+    fwrite(user, sizeof(User), 1, fp);
+    fflush(fp);
+}
+
+void showUser(FILE *fp)
+{
+    User *users = NULL;
+    int count = 0;
+
+    while (1)
+    {
+        User *temp = realloc(users, (count + 1) * sizeof(User));
+        users = temp;
+        
+        if (fread(&users[count], sizeof(User), 1, fp) != 1)
+        {
+            break;
+        }
+        count++;
+    }
+    for (int i = 0; i < sizeof(users) / sizeof(users[0]); i++)
+    {
+        printf("%s", users[i].username);
+    }
+}
+

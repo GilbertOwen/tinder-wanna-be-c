@@ -169,7 +169,7 @@ void generateMenu(User *p);
 void loginPage();
 void registerUser(User *user, FILE *fp);
 void loginUser(User *user, FILE *fp);
-void showUser(FILE *fp);
+
 int main()
 {
     // Check for user data file
@@ -1198,7 +1198,6 @@ void loginPage(User *user, FILE *fp)
     int choice;
     puts("1. Login");
     puts("2. Register");
-    puts("3. showUser");
     
     printf("Your choice: ");
     scanf("%d", &choice);
@@ -1207,15 +1206,8 @@ void loginPage(User *user, FILE *fp)
     {
         case 1:
             loginUser(user, fp);
-            break;
         case 2:
             registerUser(user, fp);
-            break;
-        case 3:
-            showUser(fp);
-            getchar();
-            getchar();
-            break;
         default:
             puts("Masukin yang bener ya dek");
     }
@@ -1260,26 +1252,3 @@ void registerUser(User *user, FILE *fp)
     fwrite(user, sizeof(User), 1, fp);
     fflush(fp);
 }
-
-void showUser(FILE *fp)
-{
-    User *users = NULL;
-    int count = 0;
-
-    while (1)
-    {
-        User *temp = realloc(users, (count + 1) * sizeof(User));
-        users = temp;
-        
-        if (fread(&users[count], sizeof(User), 1, fp) != 1)
-        {
-            break;
-        }
-        count++;
-    }
-    for (int i = 0; i < sizeof(users) / sizeof(users[0]); i++)
-    {
-        printf("%s", users[i].username);
-    }
-}
-

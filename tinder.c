@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 #define CLEAR_SCREEN_REGEX "\e[1;1H\e[2J"
 #define INVALID_PREFERENCES -1
+#define USERDATA "userdata.dat"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -25,9 +27,12 @@ void printLogo()
     puts("Cinder, a Tinder-like dating app\n");
 }
 
-void getbuffer(){
+void getbuffer()
+{
     char c;
-    while ((c = getchar()) != '\n' && c != EOF) {}
+    while ((c = getchar()) != '\n' && c != EOF)
+    {
+    }
 }
 
 void clearScreen()
@@ -92,45 +97,48 @@ typedef struct
 
 typedef struct
 {
+    char username[100];
+    char password[100];
     char nama[100];
     enum JenisKelamin jenis_kelamin;
     Criteria kriteria;
     int umur;
+    int isAdmin;
 } User;
 
 int candidateIndex = 0;
 
 User otherUsers[40] = {
-    {"Alex", pria, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 22},
-    {"Jordan", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25},
-    {"Taylor", pria, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23},
-    {"Morgan", wanita, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, ReceivingGIft, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24},
-    {"Jamie", pria, {{22, 32}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, Outdoor, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 28},
-    {"Sam", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {Gaming, CreativeArt, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, NightOwl, INVALID_PREFERENCES}}, 27},
-    {"Chris", pria, {{25, 35}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 30},
-    {"Casey", wanita, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 22},
-    {"Skyler", pria, {{18, 26}, {WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24},
-    {"Drew", wanita, {{22, 30}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26},
-    {"Riley", pria, {{20, 28}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23},
-    {"Quinn", wanita, {{18, 24}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 21},
-    {"Harper", pria, {{22, 32}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29},
-    {"Jamie", wanita, {{20, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24},
-    {"Cameron", pria, {{18, 24}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Sport, Gaming, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 20},
-    {"Reese", wanita, {{22, 32}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, CreativeArt, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 28},
-    {"Toby", pria, {{18, 26}, {WordOfAffirmation, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24},
-    {"Sydney", wanita, {{22, 30}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27},
-    {"Blake", pria, {{20, 30}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 29},
-    {"Avery", wanita, {{22, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26},
-    {"Peyton", pria, {{18, 24}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23},
-    {"Robin", wanita, {{22, 32}, {QualityTime, WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27},
-    {"Devon", pria, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24},
-    {"Dylan", wanita, {{22, 30}, {WordOfAffirmation, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25},
-    {"Kai", pria, {{18, 26}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 21},
-    {"Toni", wanita, {{20, 28}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24},
-    {"Kendall", pria, {{22, 30}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 26},
-    {"Jules", wanita, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Technology, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 22},
-    {"Rowan", pria, {{22, 30}, {WordOfAffirmation, QualityTime, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29},
-    {"Taylor", wanita, {{20, 28}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27},
+    {"userlain", "password", "Alex", pria, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 22, 0},
+    {"userlain", "password", "Jordan", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25, 0},
+    {"userlain", "password", "Taylor", pria, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23, 0},
+    {"userlain", "password", "Morgan", wanita, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, ReceivingGIft, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24, 0},
+    {"userlain", "password", "Jamie", pria, {{22, 32}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, Outdoor, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 28, 0},
+    {"userlain", "password", "Sam", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {Gaming, CreativeArt, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, NightOwl, INVALID_PREFERENCES}}, 27, 0},
+    {"userlain", "password", "Chris", pria, {{25, 35}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 30, 0},
+    {"userlain", "password", "Casey", wanita, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 22, 0},
+    {"userlain", "password", "Skyler", pria, {{18, 26}, {WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24, 0},
+    {"userlain", "password", "Drew", wanita, {{22, 30}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26, 0},
+    {"userlain", "password", "Riley", pria, {{20, 28}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23, 0},
+    {"userlain", "password", "Quinn", wanita, {{18, 24}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 21, 0},
+    {"userlain", "password", "Harper", pria, {{22, 32}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29, 0},
+    {"userlain", "password", "Jamie", wanita, {{20, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24, 0},
+    {"userlain", "password", "Cameron", pria, {{18, 24}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Sport, Gaming, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 20, 0},
+    {"userlain", "password", "Reese", wanita, {{22, 32}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, CreativeArt, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 28, 0},
+    {"userlain", "password", "Toby", pria, {{18, 26}, {WordOfAffirmation, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24, 0},
+    {"userlain", "password", "Sydney", wanita, {{22, 30}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27, 0},
+    {"userlain", "password", "Blake", pria, {{20, 30}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 29, 0},
+    {"userlain", "password", "Avery", wanita, {{22, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26, 0},
+    {"userlain", "password", "Peyton", pria, {{18, 24}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23, 0},
+    {"userlain", "password", "Robin", wanita, {{22, 32}, {QualityTime, WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27, 0},
+    {"userlain", "password", "Devon", pria, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24, 0},
+    {"userlain", "password", "Dylan", wanita, {{22, 30}, {WordOfAffirmation, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25, 0},
+    {"userlain", "password", "Kai", pria, {{18, 26}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 21, 0},
+    {"userlain", "password", "Toni", wanita, {{20, 28}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24, 0},
+    {"userlain", "password", "Kendall", pria, {{22, 30}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 26, 0},
+    {"userlain", "password", "Jules", wanita, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Technology, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 22, 0},
+    {"userlain", "password", "Rowan", pria, {{22, 30}, {WordOfAffirmation, QualityTime, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29, 0},
+    {"userlain", "password", "Taylor", wanita, {{20, 28}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27, 0},
 };
 
 // Function Prototype
@@ -162,12 +170,34 @@ void resetPreferences(User *p, char choice);
 void editUserCriteria(User *p);
 void showCandidates(User *p);
 void generateMenu(User *p);
+void adminMenu(User *p, FILE *fp);
+void loginPage(User *user, FILE *fp);
+void registerUser(User *user, FILE *fp);
+void loginUser(User *user, FILE *fp);
 
 int main()
 {
+    // Check for user data file
+    FILE *userDataFile = fopen(USERDATA, "ab+");
+    if (userDataFile == NULL)
+    {
+        FILE *tempFile = fopen(USERDATA, "wb");
+        if (tempFile != NULL)
+        {
+            fclose(tempFile);
+        }
+        userDataFile = fopen(USERDATA, "ab+");
+    }
+
     User *player = (User *)malloc(sizeof(User));
+
     resetCriteria(player);
-    askUser(player);
+    loginPage(player, userDataFile);
+    if (player->isAdmin == 1)
+    {
+        adminMenu(player, userDataFile);
+        return 0;
+    }
     generateMenu(player);
     free(player);
     return 0;
@@ -1132,6 +1162,56 @@ void showCandidates(User *p)
     getchar();
 }
 
+int getUsers(FILE *fp, User *users)
+{
+    User user;
+    int i = 0;
+    fseek(fp, 0, SEEK_SET);
+    while (fread(&user, sizeof(User), 1, fp) == 1 && i < 40)
+    {
+        users[i] = user;
+        memcpy(&users[i], &user, sizeof(User));
+        i++;
+    }
+    return i;
+}
+
+void showUsers(FILE *fp)
+{
+    User *users = (User *)malloc(40 * sizeof(User));
+    int count = getUsers(fp, users);
+    if (count == 0)
+    {
+        printf("Data user tidak ada");
+        free(users);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+        return;
+    }
+    else
+    {
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        printf("| No.  | Username       | Name           | Age | Gender  | Admin   |\n");
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        for (int i = 0; i < count; i++)
+        {
+            printf("| %-4d | %-14s | %-14s | %-3d | %-7s | %-7s |\n",
+                   i + 1,
+                   users[i].username,
+                   users[i].nama,
+                   users[i].umur,
+                   users[i].jenis_kelamin == pria ? "Pria" : "Wanita",
+                   users[i].isAdmin ? "Yes" : "No");
+        }
+
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+
+        free(users);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+    }
+}
+
 void generateMenu(User *p)
 {
     int menu;
@@ -1171,4 +1251,177 @@ void generateMenu(User *p)
             break;
         }
     } while (menu != 4);
+}
+void deleteUser(FILE *fp)
+{
+    while (1)
+    {
+        User *users = (User *)malloc(40 * sizeof(User));
+        User newUsers[40];
+        showUsers(fp);
+        int newUsersCount = 0;
+        int count = getUsers(fp, users);
+        char username[50];
+        printf("Masukkan username yang ingin dihapus : ");
+        scanf("%49[^\n]", username);
+        getchar();
+        int isExist = 0;
+        for (int i = 0; i < count; i++)
+        {
+            if (strcmp(users[i].username, username) != 0)
+            {
+                newUsers[newUsersCount++] = users[i];
+            }
+            else
+            {
+                isExist = 1;
+            }
+        }
+
+        if (isExist == 0)
+        {
+            puts("Username tidak ditemukan");
+            free(users);
+            continue;
+        }
+        freopen(USERDATA, "wb+", fp);
+        fseek(fp, 0, SEEK_SET);
+        SLEEP(2000);
+        for (int i = 0; i < newUsersCount; i++)
+        {
+            fwrite(&newUsers[i], sizeof(User), 1, fp);
+        }
+        freopen(USERDATA, "ab+", fp);
+        free(users);
+        printf("User %s berhasil dihapus\n", username);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+        break;
+    };
+}
+
+void adminMenu(User *p, FILE *fp)
+{
+    int menu;
+    do
+    {
+        clear_screen();
+        printLogo();
+        printf("Menu of Admin :\n");
+        printf("1. Show Users\n");
+        printf("2. Delete User\n");
+        printf("3. Exit\n");
+        printf("Your choice : ");
+        scanf("%d", &menu);
+        getchar();
+
+        switch (menu)
+        {
+        case 1:
+            showUsers(fp);
+            break;
+        case 2:
+            deleteUser(fp);
+            break;
+        case 3:
+            puts("Thanks for using our app!");
+            break;
+        default:
+            break;
+        }
+    } while (menu != 3);
+}
+
+void loginPage(User *user, FILE *fp)
+{
+    int choice;
+    puts("1. Login");
+    puts("2. Register");
+
+    printf("Your choice: ");
+    scanf("%d", &choice);
+    getchar();
+
+    switch (choice)
+    {
+    case 1:
+        loginUser(user, fp);
+        break;
+    case 2:
+        registerUser(user, fp);
+        break;
+    default:
+        puts("Masukin yang bener ya dek");
+    }
+}
+
+void loginUser(User *user, FILE *fp)
+{
+    char tempUserName[100], tempPassword[100];
+    int authenticated = 0;
+    do
+    {
+        clear_screen();
+        printf("Enter your username: ");
+        scanf("%s", tempUserName);
+        getchar();
+
+        printf("Enter your password: ");
+        scanf("%s", tempPassword);
+        getchar();
+        if (strcmp(tempUserName, "admin") == 0 || strcmp(tempPassword, "admin123") == 0)
+        {
+            user->isAdmin = 1;
+            strcpy(user->nama, tempUserName);
+            user->umur = 20;
+            strcpy(user->password, tempPassword);
+            user->jenis_kelamin = pria;
+            break;
+        }
+        User *users = (User *)malloc(40 * sizeof(User));
+
+        getUsers(fp, users);
+        for (int i = 0; i < 40; i++)
+        {
+            if (strcmp(tempUserName, users[i].username) == 0 && strcmp(tempPassword, users[i].password) == 0)
+            {
+                *user = users[i];
+                authenticated = 1;
+                break;
+            }
+        }
+        free(users);
+    } while (authenticated != 1);
+}
+
+void registerUser(User *user, FILE *fp)
+{
+    char tempUserName[100], tempPassword[100];
+    do
+    {
+        printf("Enter your username: ");
+        scanf("%s", tempUserName);
+        getchar();
+
+        printf("Enter your password: ");
+        scanf("%s", tempPassword);
+        getchar();
+
+        int passLen = strlen(tempPassword);
+
+        if (passLen < 8)
+            puts("Try again");
+        else
+            break;
+
+    } while (1);
+
+    strcpy(user->username, tempUserName);
+    strcpy(user->password, tempPassword);
+    user->isAdmin = 0;
+
+    askUser(user);
+
+    fwrite(user, sizeof(User), 1, fp);
+    fflush(fp);
 }

@@ -40,6 +40,11 @@ void clearScreen()
     printf(CLEAR_SCREEN_REGEX);
 }
 
+void header()
+{
+    clearScreen();
+    printLogo();
+}
 enum JenisKelamin
 {
     pria,
@@ -108,38 +113,38 @@ typedef struct
 
 int candidateIndex = 0;
 
-User otherUsers[40] = {
-    {"userlain", "password", "Alex", pria, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 22, 0},
-    {"userlain", "password", "Jordan", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25, 0},
-    {"userlain", "password", "Taylor", pria, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23, 0},
-    {"userlain", "password", "Morgan", wanita, {{18, 24}, {QualityTime, PhysicalTouch, ActOfService, ReceivingGIft, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24, 0},
-    {"userlain", "password", "Jamie", pria, {{22, 32}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, Outdoor, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 28, 0},
-    {"userlain", "password", "Sam", wanita, {{20, 30}, {WordOfAffirmation, QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {Gaming, CreativeArt, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, NightOwl, INVALID_PREFERENCES}}, 27, 0},
-    {"userlain", "password", "Chris", pria, {{25, 35}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 30, 0},
-    {"userlain", "password", "Casey", wanita, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 22, 0},
-    {"userlain", "password", "Skyler", pria, {{18, 26}, {WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24, 0},
-    {"userlain", "password", "Drew", wanita, {{22, 30}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26, 0},
-    {"userlain", "password", "Riley", pria, {{20, 28}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Sport, Outdoor, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23, 0},
-    {"userlain", "password", "Quinn", wanita, {{18, 24}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 21, 0},
-    {"userlain", "password", "Harper", pria, {{22, 32}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Gaming, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Undecided, Casual, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29, 0},
-    {"userlain", "password", "Jamie", wanita, {{20, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Undecided, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24, 0},
-    {"userlain", "password", "Cameron", pria, {{18, 24}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Sport, Gaming, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 20, 0},
-    {"userlain", "password", "Reese", wanita, {{22, 32}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, CreativeArt, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 28, 0},
-    {"userlain", "password", "Toby", pria, {{18, 26}, {WordOfAffirmation, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24, 0},
-    {"userlain", "password", "Sydney", wanita, {{22, 30}, {QualityTime, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27, 0},
-    {"userlain", "password", "Blake", pria, {{20, 30}, {ActOfService, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {Flexible, NightOwl, INVALID_PREFERENCES}}, 29, 0},
-    {"userlain", "password", "Avery", wanita, {{22, 28}, {QualityTime, PhysicalTouch, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 26, 0},
-    {"userlain", "password", "Peyton", pria, {{18, 24}, {ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Sport, Technology, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 23, 0},
-    {"userlain", "password", "Robin", wanita, {{22, 32}, {QualityTime, WordOfAffirmation, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27, 0},
-    {"userlain", "password", "Devon", pria, {{18, 24}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 24, 0},
-    {"userlain", "password", "Dylan", wanita, {{22, 30}, {WordOfAffirmation, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Sport, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 25, 0},
-    {"userlain", "password", "Kai", pria, {{18, 26}, {ActOfService, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 21, 0},
-    {"userlain", "password", "Toni", wanita, {{20, 28}, {QualityTime, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 24, 0},
-    {"userlain", "password", "Kendall", pria, {{22, 30}, {QualityTime, WordOfAffirmation, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Extroverted, INVALID_PREFERENCES}, {Technology, Gaming, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 26, 0},
-    {"userlain", "password", "Jules", wanita, {{18, 24}, {PhysicalTouch, ReceivingGIft, INVALID_PREFERENCES, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Ambivert, Introverted, INVALID_PREFERENCES}, {CreativeArt, Technology, Gaming, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, LongTerm, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 22, 0},
-    {"userlain", "password", "Rowan", pria, {{22, 30}, {WordOfAffirmation, QualityTime, ActOfService, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Extroverted, Ambivert, INVALID_PREFERENCES}, {Gaming, Technology, Outdoor, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Casual, Undecided, INVALID_PREFERENCES}, {NightOwl, Flexible, INVALID_PREFERENCES}}, 29, 0},
-    {"userlain", "password", "Taylor", wanita, {{20, 28}, {QualityTime, ReceivingGIft, PhysicalTouch, INVALID_PREFERENCES, INVALID_PREFERENCES}, {Introverted, Ambivert, INVALID_PREFERENCES}, {CreativeArt, Outdoor, Sport, INVALID_PREFERENCES, INVALID_PREFERENCES}, {LongTerm, Casual, INVALID_PREFERENCES}, {MorningPerson, Flexible, INVALID_PREFERENCES}}, 27, 0},
-};
+void generateRandomUser(User *user, int index)
+{
+    const char *names[] = {"Alex", "Jordan", "Taylor", "Morgan", "Jamie", "Sam", "Chris", "Casey", "Skyler", "Drew",
+                           "Riley", "Quinn", "Harper", "Cameron", "Reese", "Toby", "Sydney", "Blake", "Avery", "Peyton", "Robin", "Devon", "Dylan", "Kai", "Toni", "Kendall", "Jules", "Rowan"};
+    size_t names_count = sizeof(names) / sizeof(names[0]);
+
+    sprintf(user->username, "user%d", index);
+    strcpy(user->password, "password");
+    strcpy(user->nama, names[rand() % names_count]);
+    user->jenis_kelamin = rand() % 2;
+    user->umur = rand() % 15 + 18; // Age between 18 and 32
+    user->isAdmin = 0;
+
+    // Generate criteria
+    user->kriteria.jarak_umur[0] = rand() % 10 + 18;                           // Minimum age preference
+    user->kriteria.jarak_umur[1] = user->kriteria.jarak_umur[0] + rand() % 10; // Maximum age preference
+
+    for (int i = 0; i < 5; i++)
+    {
+        user->kriteria.tipeLoveLanguage[i] = (i < 3) ? rand() % 5 : INVALID_PREFERENCES;
+        user->kriteria.tipeHobby[i] = (i < 3) ? rand() % 5 : INVALID_PREFERENCES;
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        user->kriteria.tipePersonality[i] = (i < 2) ? rand() % 3 : INVALID_PREFERENCES;
+        user->kriteria.tipeRelationShipGoal[i] = (i < 2) ? rand() % 3 : INVALID_PREFERENCES;
+        user->kriteria.tipeLifestyle[i] = (i < 2) ? rand() % 3 : INVALID_PREFERENCES;
+    }
+}
+
+User otherUsers[100];
 
 // Function Prototype
 
@@ -168,6 +173,8 @@ void askUser(User *p);
 void showProfile(User *p);
 void resetPreferences(User *p, char choice);
 void editUserCriteria(User *p);
+void sortByAge(User *users[100], char by);
+// void sortByName(User *users[100], char by);
 void showCandidates(User *p);
 void generateMenu(User *p);
 void adminMenu(User *p, FILE *fp);
@@ -177,6 +184,11 @@ void loginUser(User *user, FILE *fp);
 
 int main()
 {
+    for (int i = 0; i < 100; i++)
+    {
+        generateRandomUser(&otherUsers[i], i + 1);
+    }
+
     // Check for user data file
     FILE *userDataFile = fopen(USERDATA, "ab+");
     if (userDataFile == NULL)
@@ -192,6 +204,7 @@ int main()
     User *player = (User *)malloc(sizeof(User));
 
     resetCriteria(player);
+    header();
     loginPage(player, userDataFile);
     if (player->isAdmin == 1)
     {
@@ -1084,12 +1097,12 @@ void editUserCriteria(User *p)
     } while (menu != 8);
 }
 
-void getCandidates(User *p, User *new[40])
+void getCandidates(User *p, User *new[100])
 {
     int count = 0;
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 100; i++)
     {
-        int validatedPersonality = 0, validatedRelationShipGoal = 0, validateGender = 0;
+        int validatedPersonality = 0, validatedRelationShipGoal = 0, validateGender = 0, validateAgePreference = 0, validateLifestylePreference = 0;
         for (int j = 0; j < 3; j++)
         {
             if (p->kriteria.tipePersonality[j] != -1)
@@ -1121,45 +1134,284 @@ void getCandidates(User *p, User *new[40])
                     }
                 }
             }
+            if (p->kriteria.tipeLifestyle[j] != -1)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    if (otherUsers[i].kriteria.tipeLifestyle[k] != -1)
+                    {
+                        if (p->kriteria.tipeLifestyle[j] == otherUsers[i].kriteria.tipeLifestyle[k])
+                        {
+                            validateLifestylePreference = 1;
+                        }
+                    }
+                }
+            }
         }
         if (p->jenis_kelamin != otherUsers[i].jenis_kelamin)
         {
             validateGender = 1;
         }
-        if (validatedPersonality == 1 && validatedRelationShipGoal == 1 && validateGender == 1)
+        if ((p->umur >= otherUsers[i].kriteria.jarak_umur[0] && p->umur <= otherUsers[i].kriteria.jarak_umur[1]) && (otherUsers[i].umur >= p->kriteria.jarak_umur[0] && otherUsers[i].umur <= p->kriteria.jarak_umur[1]))
+        {
+            validateAgePreference = 1;
+        }
+        if (validatedPersonality == 1 && validatedRelationShipGoal == 1 && validateGender == 1 && validateAgePreference == 1 && validateLifestylePreference == 1)
         {
 
             new[count] = &otherUsers[i];
             count++;
         }
     }
-    for (int i = count; i < 40; i++)
+    for (int i = count; i < 100; i++)
     {
         new[i] = NULL;
+    }
+}
+void sortByAge(User *userCandidate[100], char by)
+{
+    // This 'by' using bubble sort algorithm to do ascending
+    if (by == 'a')
+    {
+        for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
+        {
+            int swapped = 0;
+            for (int j = i + 1; j < 100 && userCandidate[j] != NULL; j++)
+            {
+                if (userCandidate[i]->umur > userCandidate[j]->umur)
+                {
+                    User *temp = userCandidate[i];
+                    userCandidate[i] = userCandidate[j];
+                    userCandidate[j] = temp;
+                    swapped = 1;
+                }
+            }
+            if (swapped == 0)
+            {
+                break;
+            }
+        }
+    }
+    else if (by == 'd')
+    {
+        // This sort using selection sort algorithm to do descending
+        for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
+        {
+            int max_idx = i;
+            for (int j = i + 1; j < 100 && userCandidate[j] != NULL; j++)
+            {
+                if (userCandidate[j]->umur > userCandidate[max_idx]->umur)
+                {
+                    max_idx = j;
+                }
+            }
+            if (max_idx != i)
+            {
+                User *temp = userCandidate[i];
+                userCandidate[i] = userCandidate[max_idx];
+                userCandidate[max_idx] = temp;
+            }
+        }
+    }
+}
+
+void merge(User *arr[], int left, int mid, int right)
+{
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    // Allocate arrays for pointers
+    User **L = (User **)malloc(n1 * sizeof(User *));
+    User **R = (User **)malloc(n2 * sizeof(User *));
+
+    // Copy pointers into temporary arrays
+    for (int i = 0; i < n1; i++)
+    {
+        L[i] = arr[left + i];
+    }
+    for (int j = 0; j < n2; j++)
+    {
+        R[j] = arr[mid + 1 + j];
+    }
+
+    // Merge the arrays
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2)
+    {
+        if (strcmp(L[i]->nama, R[j]->nama) < 0)
+        { // Compare by name
+            arr[k] = L[i];
+            i++;
+        }
+        else
+        {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy remaining elements
+    while (i < n1)
+    {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2)
+    {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+
+    free(L);
+    free(R);
+}
+
+void mergeSort(User *arr[], int left, int right)
+{
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+
+void sortByName(User *userCandidate[100], char by)
+{
+    if (by == 'a')
+    {
+        // Insertion Sort (Ascending)
+        for (int i = 1; i < 100 && userCandidate[i] != NULL; i++)
+        {
+            User *key = userCandidate[i];
+            int j = i - 1;
+            while (j >= 0 && strcmp(userCandidate[j]->nama, key->nama) < 0)
+            {
+                userCandidate[j + 1] = userCandidate[j];
+                j--;
+            }
+            userCandidate[j + 1] = key;
+        }
+    }
+    else
+    {
+        // Merge Sort (Descending)
+        int lastIndex = 0;
+        for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
+        {
+            lastIndex = i;
+        }
+        mergeSort(userCandidate, 0, lastIndex);
     }
 }
 
 void showCandidates(User *p)
 {
-    User *userCandidate[40] = {0};
+    User *userCandidate[100] = {0};
     getCandidates(p, userCandidate);
-
-    for (int j = 0; j < 40; j++)
+    int menu = 0;
+    do
     {
-        if (userCandidate[j] != NULL)
+        header();
+        printf("Pilih menu sortiran\n");
+        printf("1. Umur terkecil\n");
+        printf("2. Umur terbesar\n");
+        printf("3. Nama terkecil\n");
+        printf("4. Nama terbesar\n");
+        printf("5. Kembali\n");
+        scanf("%d", &menu);
+        getchar();
+        header();
+        switch (menu)
         {
-            printf("User's Profile\n");
-            printf("Name : %s\n", userCandidate[j]->nama);
-            printf("Age : %d\n", userCandidate[j]->umur);
-            printf("Gender : %s\n\n", userCandidate[j]->jenis_kelamin == pria ? "Pria" : "Wanita");
+        case 1:
+            sortByAge(userCandidate, 'a');
+            break;
+        case 2:
+            sortByAge(userCandidate, 'd');
+            break;
+        case 3:
+            sortByName(userCandidate, 'a');
+            break;
+        case 4:
+            sortByName(userCandidate, 'd');
+            break;
+        case 5:
+            break;
+        default:
+            break;
         }
-        else
+        for (int j = 0; j < 100 && userCandidate[j] != NULL; j++)
         {
-            continue;
+            if (userCandidate[j] != NULL)
+            {
+                printf("User's Profile\n");
+                printf("Name : %s\n", userCandidate[j]->nama);
+                printf("Age : %d\n", userCandidate[j]->umur);
+                printf("Gender : %s\n\n", userCandidate[j]->jenis_kelamin == pria ? "Pria" : "Wanita");
+            }
+            else
+            {
+                continue;
+            }
         }
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+    } while (menu != 5);
+}
+
+int getUsers(FILE *fp, User *users)
+{
+    User user;
+    int i = 0;
+    fseek(fp, 0, SEEK_SET);
+    while (fread(&user, sizeof(User), 1, fp) == 1 && i < 40)
+    {
+        users[i] = user;
+        memcpy(&users[i], &user, sizeof(User));
+        i++;
     }
-    printf("Tekan tombol apa saja untuk melanjutkan\n");
-    getchar();
+    return i;
+}
+
+void showUsers(FILE *fp)
+{
+    User *users = (User *)malloc(40 * sizeof(User));
+    int count = getUsers(fp, users);
+    if (count == 0)
+    {
+        printf("Data user tidak ada");
+        free(users);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+        return;
+    }
+    else
+    {
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        printf("| No.  | Username       | Name           | Age | Gender  | Admin   |\n");
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        for (int i = 0; i < count; i++)
+        {
+            printf("| %-4d | %-14s | %-14s | %-3d | %-7s | %-7s |\n",
+                   i + 1,
+                   users[i].username,
+                   users[i].nama,
+                   users[i].umur,
+                   users[i].jenis_kelamin == pria ? "Pria" : "Wanita",
+                   users[i].isAdmin ? "Yes" : "No");
+        }
+
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+
+        free(users);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+    }
 }
 
 int getUsers(FILE *fp, User *users)

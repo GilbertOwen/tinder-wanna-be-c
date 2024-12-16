@@ -1309,6 +1309,136 @@ void sortByName(User *userCandidate[100], char by)
     }
 }
 
+User *binarySearch(User *userCandidate[100], char name[100], int low, int high)
+{
+    // We need to sort first
+    sortByName(userCandidate, 'a');
+    int lastIndex;
+    for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
+    {
+        lastIndex = i;
+    }
+    if (lastIndex < high)
+    {
+        high = lastIndex;
+    }
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+
+        if (mid < low || mid > high || userCandidate[mid] == NULL)
+        {
+            return NULL;
+        }
+
+        if (userCandidate[mid]->nama != NULL && strcmp(userCandidate[mid]->nama, name) == 0)
+        {
+            return userCandidate[mid];
+        }
+
+        if (userCandidate[mid]->nama != NULL && strcmp(userCandidate[mid]->nama, name) < 0)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+    return NULL;
+}
+
+User *interpolationSearch(User *userCandidate[100], char name[100], int low, int high)
+{
+    // We need to sort first
+    sortByName(userCandidate, 'a');
+    int lastIndex;
+    for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
+    {
+        lastIndex = i;
+    }
+    if (lastIndex < high)
+    {
+        high = lastIndex;
+    }
+    while (low <= high)
+    {
+        // This uses interpolation algorithm to search by Name
+        int mid = low + ((high - low) * (strcmp(name, userCandidate[low]->nama))) /
+                            (strcmp(userCandidate[high]->nama, userCandidate[low]->nama));
+
+        if (mid < low || mid > high || userCandidate[mid] == NULL)
+        {
+            return NULL;
+        }
+
+        if (userCandidate[mid]->nama != NULL && strcmp(userCandidate[mid]->nama, name) == 0)
+        {
+            return userCandidate[mid];
+        }
+
+        if (userCandidate[mid]->nama != NULL && strcmp(userCandidate[mid]->nama, name) < 0)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+    return NULL;
+}
+
+void findCandidate(User *p, User *userCandidate[100])
+{
+    User *user = NULL;
+    printf("Masukkan nama: ");
+    char temp[100];
+    int type = 0;
+    scanf("%[^\n]", temp);
+    getchar();
+    printf("Jenis searching algorithm yang ingin kamu gunakan\n");
+    printf("1. Linear Search\n");
+    printf("2. Binary Search\n");
+    printf("3. Interpolation Search\n");
+    printf("Pilihan : ");
+    scanf("%d", &type);
+    getchar();
+    int lastIndex = 0;
+
+    if (type == 1)
+    {
+        // This uses linear search to search
+        for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
+        {
+            if (strcmp(userCandidate[i]->nama, temp) == 0)
+            {
+                user = userCandidate[i];
+                break;
+            }
+        }
+    }
+    else if (type == 2)
+    {
+
+        // This uses binary search to search
+        user = binarySearch(userCandidate, temp, 0, 100);
+    }
+    else if (type == 3)
+    {
+        // This uses interpolation search to search
+        user = interpolationSearch(userCandidate, temp, 0, 100);
+    }
+    if (user == NULL)
+    {
+        printf("Tidak ada yang cocok\n");
+    }
+    else
+    {
+        showProfile(user);
+    }
+}
+
 void showCandidates(User *p)
 {
     User *userCandidate[100] = {0};
@@ -1322,7 +1452,8 @@ void showCandidates(User *p)
         printf("2. Umur terbesar\n");
         printf("3. Nama terkecil\n");
         printf("4. Nama terbesar\n");
-        printf("5. Kembali\n");
+        printf("5. Cari kandidat sesuai nama\n");
+        printf("6. Kembali\n");
         scanf("%d", &menu);
         getchar();
         header();
@@ -1341,27 +1472,33 @@ void showCandidates(User *p)
             sortByName(userCandidate, 'd');
             break;
         case 5:
+            findCandidate(p, userCandidate);
+            break;
+        case 6:
             break;
         default:
             break;
         }
-        for (int j = 0; j < 100 && userCandidate[j] != NULL; j++)
+        if (menu != 5)
         {
-            if (userCandidate[j] != NULL)
+            for (int j = 0; j < 100 && userCandidate[j] != NULL; j++)
             {
-                printf("User's Profile\n");
-                printf("Name : %s\n", userCandidate[j]->nama);
-                printf("Age : %d\n", userCandidate[j]->umur);
-                printf("Gender : %s\n\n", userCandidate[j]->jenis_kelamin == pria ? "Pria" : "Wanita");
-            }
-            else
-            {
-                continue;
+                if (userCandidate[j] != NULL)
+                {
+                    printf("User's Profile\n");
+                    printf("Name : %s\n", userCandidate[j]->nama);
+                    printf("Age : %d\n", userCandidate[j]->umur);
+                    printf("Gender : %s\n\n", userCandidate[j]->jenis_kelamin == pria ? "Pria" : "Wanita");
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
         printf("Tekan tombol apa saja untuk melanjutkan\n");
         getchar();
-    } while (menu != 5);
+    } while (menu != 6);
 }
 
 int getUsers(FILE *fp, User *users)
@@ -1378,6 +1515,14 @@ int getUsers(FILE *fp, User *users)
     return i;
 }
 
+int compare(const void *a, const void *b)
+{
+    const User *UserA = (const User *)a;
+    const User *UserB = (const User *)b;
+    return strcmp(UserA->nama, UserB->nama);
+}
+
+// This function uses quick sort
 void showUsers(FILE *fp)
 {
     User *users = (User *)malloc(40 * sizeof(User));
@@ -1392,6 +1537,7 @@ void showUsers(FILE *fp)
     }
     else
     {
+        qsort(users, count, sizeof(User), compare);
         printf("+------+----------------+----------------+-----+---------+---------+\n");
         printf("| No.  | Username       | Name           | Age | Gender  | Admin   |\n");
         printf("+------+----------------+----------------+-----+---------+---------+\n");
@@ -1406,57 +1552,9 @@ void showUsers(FILE *fp)
                    users[i].isAdmin ? "Yes" : "No");
         }
 
-        printf("+------+----------------+----------------+-----+---------+---------+\n");
-
-        free(users);
-        printf("Tekan tombol apa saja untuk melanjutkan\n");
-        getchar();
-    }
-}
-
-int getUsers(FILE *fp, User *users)
-{
-    User user;
-    int i = 0;
-    fseek(fp, 0, SEEK_SET);
-    while (fread(&user, sizeof(User), 1, fp) == 1 && i < 40)
-    {
-        users[i] = user;
-        memcpy(&users[i], &user, sizeof(User));
-        i++;
-    }
-    return i;
-}
-
-void showUsers(FILE *fp)
-{
-    User *users = (User *)malloc(40 * sizeof(User));
-    int count = getUsers(fp, users);
-    if (count == 0)
-    {
-        printf("Data user tidak ada");
-        free(users);
-        printf("Tekan tombol apa saja untuk melanjutkan\n");
-        getchar();
-        return;
-    }
-    else
-    {
-        printf("+------+----------------+----------------+-----+---------+---------+\n");
-        printf("| No.  | Username       | Name           | Age | Gender  | Admin   |\n");
-        printf("+------+----------------+----------------+-----+---------+---------+\n");
-        for (int i = 0; i < count; i++)
-        {
-            printf("| %-4d | %-14s | %-14s | %-3d | %-7s | %-7s |\n",
-                   i + 1,
-                   users[i].username,
-                   users[i].nama,
-                   users[i].umur,
-                   users[i].jenis_kelamin == pria ? "Pria" : "Wanita",
-                   users[i].isAdmin ? "Yes" : "No");
-        }
-
-        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        printf("+------+----------------+----------------+-----+---------+---------+\n\n");
+        printf("Disclaimer: ");
+        printf("Users are sorted by Name with Quick Sort\n");
 
         free(users);
         printf("Tekan tombol apa saja untuk melanjutkan\n");

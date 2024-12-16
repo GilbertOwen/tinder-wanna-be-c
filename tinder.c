@@ -1414,6 +1414,56 @@ void showUsers(FILE *fp)
     }
 }
 
+int getUsers(FILE *fp, User *users)
+{
+    User user;
+    int i = 0;
+    fseek(fp, 0, SEEK_SET);
+    while (fread(&user, sizeof(User), 1, fp) == 1 && i < 40)
+    {
+        users[i] = user;
+        memcpy(&users[i], &user, sizeof(User));
+        i++;
+    }
+    return i;
+}
+
+void showUsers(FILE *fp)
+{
+    User *users = (User *)malloc(40 * sizeof(User));
+    int count = getUsers(fp, users);
+    if (count == 0)
+    {
+        printf("Data user tidak ada");
+        free(users);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+        return;
+    }
+    else
+    {
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        printf("| No.  | Username       | Name           | Age | Gender  | Admin   |\n");
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+        for (int i = 0; i < count; i++)
+        {
+            printf("| %-4d | %-14s | %-14s | %-3d | %-7s | %-7s |\n",
+                   i + 1,
+                   users[i].username,
+                   users[i].nama,
+                   users[i].umur,
+                   users[i].jenis_kelamin == pria ? "Pria" : "Wanita",
+                   users[i].isAdmin ? "Yes" : "No");
+        }
+
+        printf("+------+----------------+----------------+-----+---------+---------+\n");
+
+        free(users);
+        printf("Tekan tombol apa saja untuk melanjutkan\n");
+        getchar();
+    }
+}
+
 void generateMenu(User *p)
 {
     int menu;

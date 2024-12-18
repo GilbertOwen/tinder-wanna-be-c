@@ -172,11 +172,11 @@ void addAgeRange(User *p);
 void askUser(User *p);
 void showProfile(User *p);
 void resetPreferences(User *p, char choice);
-void editUserCriteria(User *p);
+void editUserCriteria(User *p, FILE *fp);
 void sortByAge(User *users[100], char by);
 // void sortByName(User *users[100], char by);
 void showCandidates(User *p);
-void generateMenu(User *p);
+void generateMenu(User *p, FILE *fp);
 void adminMenu(User *p, FILE *fp);
 void loginPage(User *user, FILE *fp);
 void registerUser(User *user, FILE *fp);
@@ -211,7 +211,7 @@ int main()
         adminMenu(player, userDataFile);
         return 0;
     }
-    generateMenu(player);
+    generateMenu(player, userDataFile);
     free(player);
     return 0;
 }
@@ -1028,7 +1028,7 @@ void resetPreferences(User *p, char choice)
     }
 }
 
-void editUserCriteria(User *p)
+void editUserCriteria(User *p, FILE *fp)
 {
     int menu = 0;
     do
@@ -1095,6 +1095,30 @@ void editUserCriteria(User *p)
             break;
         }
     } while (menu != 8);
+    User *users = (User *)malloc(40 * sizeof(User));
+    User newUsers[40];
+    int count = getUsers(fp, users);
+    for (int i = 0; i < count; i++)
+    {
+        if (strcmp(users[i].username, p->username) == 0)
+        {
+            newUsers[i] = *p;
+        }
+        else
+        {
+            newUsers[i] = users[i];
+        }
+    }
+    freopen(USERDATA, "wb+", fp);
+    for (int i = 0; i < count; i++)
+    {
+        fwrite(&newUsers[i], sizeof(User), 1, fp);
+    }
+    freopen(USERDATA, "ab+", fp);
+    free(users);
+    printf("Preferensi User %s berhasil diubah\n", p->username);
+    printf("Tekan tombol apa saja untuk melanjutkan\n");
+    getchar();
 }
 
 void getCandidates(User *p, User *new[100])
@@ -1289,7 +1313,7 @@ void sortByName(User *userCandidate[100], char by)
         {
             User *key = userCandidate[i];
             int j = i - 1;
-            while (j >= 0 && strcmp(userCandidate[j]->nama, key->nama) < 0)
+            while (j >= 0 && strcmp(userCandidate[j]->nama, key->nama) > 0)
             {
                 userCandidate[j + 1] = userCandidate[j];
                 j--;
@@ -1313,14 +1337,14 @@ User *binarySearch(User *userCandidate[100], char name[100], int low, int high)
 {
     // We need to sort first
     sortByName(userCandidate, 'a');
-    int lastIndex;
+    int lastItemAmount;
     for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
     {
-        lastIndex = i;
+        lastItemAmount = i;
     }
-    if (lastIndex < high)
+    if (lastItemAmount < high)
     {
-        high = lastIndex;
+        high = lastItemAmount;
     }
     while (low <= high)
     {
@@ -1352,14 +1376,14 @@ User *interpolationSearch(User *userCandidate[100], char name[100], int low, int
 {
     // We need to sort first
     sortByName(userCandidate, 'a');
-    int lastIndex;
+    int lastItemAmount;
     for (int i = 0; i < 100 && userCandidate[i] != NULL; i++)
     {
-        lastIndex = i;
+        lastItemAmount = i;
     }
-    if (lastIndex < high)
+    if (lastItemAmount < high)
     {
-        high = lastIndex;
+        high = lastItemAmount;
     }
     while (low <= high)
     {
@@ -1444,61 +1468,72 @@ void showCandidates(User *p)
     User *userCandidate[100] = {0};
     getCandidates(p, userCandidate);
     int menu = 0;
-    do
+    if (userCandidate[0] != NULL)
     {
-        header();
-        printf("Pilih menu sortiran\n");
-        printf("1. Umur terkecil\n");
-        printf("2. Umur terbesar\n");
-        printf("3. Nama terkecil\n");
-        printf("4. Nama terbesar\n");
-        printf("5. Cari kandidat sesuai nama\n");
-        printf("6. Kembali\n");
-        scanf("%d", &menu);
-        getchar();
-        header();
-        switch (menu)
+
+        do
         {
-        case 1:
-            sortByAge(userCandidate, 'a');
-            break;
-        case 2:
-            sortByAge(userCandidate, 'd');
-            break;
-        case 3:
-            sortByName(userCandidate, 'a');
-            break;
-        case 4:
-            sortByName(userCandidate, 'd');
-            break;
-        case 5:
-            findCandidate(p, userCandidate);
-            break;
-        case 6:
-            break;
-        default:
-            break;
-        }
-        if (menu != 5)
-        {
-            for (int j = 0; j < 100 && userCandidate[j] != NULL; j++)
+            header();
+            printf("Pilih menu sortiran\n");
+            printf("1. Umur terkecil\n");
+            printf("2. Umur terbesar\n");
+            printf("3. Nama terkecil\n");
+            printf("4. Nama terbesar\n");
+            printf("5. Cari kandidat sesuai nama\n");
+            printf("6. Kembali\n");
+            scanf("%d", &menu);
+            getchar();
+            header();
+            switch (menu)
             {
-                if (userCandidate[j] != NULL)
+            case 1:
+                sortByAge(userCandidate, 'a');
+                break;
+            case 2:
+                sortByAge(userCandidate, 'd');
+                break;
+            case 3:
+                sortByName(userCandidate, 'a');
+                break;
+            case 4:
+                sortByName(userCandidate, 'd');
+                break;
+            case 5:
+                findCandidate(p, userCandidate);
+                break;
+            case 6:
+                break;
+            default:
+                break;
+            }
+            if (menu != 5)
+            {
+                for (int j = 0; j < 100 && userCandidate[j] != NULL; j++)
                 {
-                    printf("User's Profile\n");
-                    printf("Name : %s\n", userCandidate[j]->nama);
-                    printf("Age : %d\n", userCandidate[j]->umur);
-                    printf("Gender : %s\n\n", userCandidate[j]->jenis_kelamin == pria ? "Pria" : "Wanita");
-                }
-                else
-                {
-                    continue;
+                    if (userCandidate[j] != NULL)
+                    {
+                        printf("User's Profile\n");
+                        printf("Name : %s\n", userCandidate[j]->nama);
+                        printf("Age : %d\n", userCandidate[j]->umur);
+                        printf("Gender : %s\n\n", userCandidate[j]->jenis_kelamin == pria ? "Pria" : "Wanita");
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
-        }
+            printf("Tekan tombol apa saja untuk melanjutkan\n");
+            getchar();
+        } while (menu != 6);
+    }
+    else
+    {
+        printf("No user available\n");
         printf("Tekan tombol apa saja untuk melanjutkan\n");
         getchar();
-    } while (menu != 6);
+        return;
+    }
 }
 
 int getUsers(FILE *fp, User *users)
@@ -1562,7 +1597,7 @@ void showUsers(FILE *fp)
     }
 }
 
-void generateMenu(User *p)
+void generateMenu(User *p,FILE *fp)
 {
     int menu;
     do
@@ -1586,7 +1621,7 @@ void generateMenu(User *p)
             break;
         case 2:
             SLEEP(250);
-            editUserCriteria(p);
+            editUserCriteria(p, fp);
             break;
         case 3:
             SLEEP(250);

@@ -1262,7 +1262,7 @@ void merge(User *arr[], int left, int mid, int right)
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2)
     {
-        if (strcmp(L[i]->nama, R[j]->nama) < 0)
+        if (strcmp(L[i]->nama, R[j]->nama) > 0)
         { // Compare by name
             arr[k] = L[i];
             i++;
@@ -1388,8 +1388,18 @@ User *interpolationSearch(User *userCandidate[100], char name[100], int low, int
     while (low <= high)
     {
         // This uses interpolation algorithm to search by Name
-        int mid = low + ((high - low) * (strcmp(name, userCandidate[low]->nama))) /
-                            (strcmp(userCandidate[high]->nama, userCandidate[low]->nama));
+        int denominator = strcmp(userCandidate[high]->nama, userCandidate[low]->nama);
+
+        if (denominator == 0)
+        {
+            if (strcmp(userCandidate[low]->nama, name) == 0)
+            {
+                return userCandidate[low];
+            }
+            return NULL;
+        }
+
+        int mid = low + ((high - low) * strcmp(name, userCandidate[low]->nama)) / denominator;
 
         if (mid < low || mid > high || userCandidate[mid] == NULL)
         {
@@ -1597,7 +1607,7 @@ void showUsers(FILE *fp)
     }
 }
 
-void generateMenu(User *p,FILE *fp)
+void generateMenu(User *p, FILE *fp)
 {
     int menu;
     do
